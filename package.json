@@ -1,0 +1,43 @@
+{
+  "name": "menghuan-koudai",
+  "productName": "梦幻口袋",
+  "version": "1.0.0",
+  "description": "梦幻口袋学习激励桌宠系统",
+  "main": "main.js",
+  "author": "MenghuanKoudai",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-builder --win dir --clean"
+  },
+  "build": {
+    "appId": "com.menghuan.koudai",
+    "productName": "梦幻口袋",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "pet-preload.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "pet-images",
+        "to": "pet-images"
+      }
+    ],
+    "win": {
+      "target": "dir",
+      "icon": "src/icon.ico",
+      "sign": false,
+      "signingHashAlgorithms": []
+    },
+    "asar": true
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  }
+}

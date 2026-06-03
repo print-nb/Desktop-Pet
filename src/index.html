@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>学习激励桌宠系统</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-logo">🐑 学习激励桌宠</div>
+      <div class="sidebar-pet-mini" id="sidebar-pet-mini"></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" data-tab="0"><span class="ni">🏠</span><span>班级首页</span></div>
+      <div class="nav-item" data-tab="1"><span class="ni">📝</span><span>任务中心</span></div>
+      <div class="nav-item" data-tab="2"><span class="ni">🐑</span><span>宠物养成</span></div>
+      <div class="nav-item" data-tab="3"><span class="ni">🛒</span><span>装扮商城</span></div>
+      <div class="nav-item" data-tab="4"><span class="ni">📊</span><span>学习数据</span></div>
+      <div class="nav-item" data-tab="5"><span class="ni">🏆</span><span>成就系统</span></div>
+      <div class="nav-item" data-tab="7"><span class="ni">🤖</span><span>智能助手</span></div>
+      <div class="nav-item" data-tab="6"><span class="ni">⚙️</span><span>系统设置</span></div>
+    </div>
+    <div class="sidebar-bottom">
+      <div id="sidebar-date"></div>
+      <div id="sidebar-today-done">今日已完成 0 个任务</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="top-bar">
+      <div class="student-card" id="student-card">
+        <div class="sc-avatar" id="sc-avatar">🐑</div>
+        <div class="sc-info">
+          <div class="sc-name" id="sc-name" title="点击修改昵称">测试学生</div>
+          <div class="sc-detail"><span id="sc-class">测试一班</span> · <span id="sc-group">未加入</span></div>
+          <div class="sc-stats">成长 <b id="sc-growth">0</b> · 今日 <b id="sc-today-growth">0</b> · 排名 <b id="sc-rank">-</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- 0: 班级首页 -->
+      <div class="page active" id="page-0">
+        <div class="page-inner" id="class-join-section">
+          <div class="welcome-box"><div class="wb-icon">🏫</div><h2>加入班级</h2><p>请输入班级邀请码开始你的学习之旅</p>
+            <div class="join-form"><input type="text" id="invite-code" placeholder="请输入班级邀请码" maxlength="6"><button class="btn" id="join-btn">加入班级</button></div>
+            <p class="err" id="join-error"></p>
+            <p style="text-align:center;margin-top:12px"><a href="#" onclick="resetData()" style="color:#999;font-size:12px;text-decoration:none">清除数据，重新开始</a></p>
+            <div class="pet-selection" id="pet-selection">
+              <h3>选择你的小组桌宠</h3>
+              <div class="pet-list" id="petList"><p style="color:#999">正在加载桌宠...</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="page-inner" id="class-home-section" style="display:none">
+          <div class="welcome-box" id="welcome-text"></div>
+          <div class="card-row">
+            <div class="card" id="group-info-card"></div>
+            <div class="card" id="group-rank-card"></div>
+          </div>
+          <div class="card"><h3>👥 小组成员</h3><div id="member-list"></div></div>
+          <div class="card"><h3>📢 小组公告</h3><div id="bulletin-list"></div></div>
+          <div class="card"><h3>⚡ 快速操作</h3>
+            <div class="quick-actions">
+              <button class="btn btn-sm" onclick="switchTab(1)">添加任务</button>
+              <button class="btn btn-sm" onclick="switchTab(2)">查看宠物</button>
+              <button class="btn btn-sm" onclick="switchTab(3)">兑换装扮</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1: 任务中心 -->
+      <div class="page" id="page-1">
+        <div class="page-inner">
+          <div class="page-head"><h2>任务中心</h2><button class="btn" id="add-task-btn">+ 添加测试任务</button></div>
+          <div class="stat-cards" id="task-stat-cards"></div>
+          <div class="card"><div id="task-list"></div></div>
+        </div>
+      </div>
+
+      <!-- 2: 宠物养成 -->
+      <div class="page" id="page-2">
+        <div class="page-inner" id="pet-not-joined"><div class="empty-icon">🔒</div><p>请先加入班级</p></div>
+        <div class="page-inner pet-page" id="pet-joined-section" style="display:none">
+          <div class="pet-left-col">
+            <div class="pet-big" id="pet-display"></div>
+            <div class="pet-name-label" id="pet-name-label"></div>
+            <div class="pet-interact">
+              <button class="btn btn-sm" onclick="petInteract('pat')">🤚 摸摸头</button>
+              <button class="btn btn-sm" onclick="petInteract('greet')">👋 打招呼</button>
+            </div>
+            <div class="pet-speech" id="pet-speech" style="display:none"></div>
+          </div>
+          <div class="pet-right-col">
+            <h2 id="pet-name"></h2>
+            <div class="card" id="pet-stats-card"></div>
+            <div class="card" id="pet-evolution-card"><h3>📜 进化历史</h3><div id="evolution-list"></div></div>
+            <div class="card" id="pet-diary-card"><h3>📖 宠物日记</h3><div id="diary-list"></div></div>
+            <div class="card"><h3>🏅 小组宠物排行</h3><div id="pet-rank-list"></div></div>
+            <div class="pet-controls">
+              <button class="btn" id="show-pet-btn">显示悬浮桌宠</button>
+              <button class="btn btn-outline" id="hide-pet-btn">隐藏悬浮桌宠</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: 装扮商城 -->
+      <div class="page" id="page-3">
+        <div class="page-inner">
+          <div class="page-head"><h2>装扮商城</h2><div class="coin-badge">💰 <span id="shop-coins">0</span></div></div>
+          <div class="shop-tabs" id="shop-tabs"></div>
+          <div class="shop-grid" id="shop-grid"></div>
+        </div>
+      </div>
+
+      <!-- 4: 学习数据 -->
+      <div class="page" id="page-4">
+        <div class="page-inner">
+          <h2>学习数据</h2>
+          <div class="stat-cards" id="data-today-cards"></div>
+          <div class="card-row">
+            <div class="card"><h3>📈 近7天任务完成趋势</h3><canvas id="chart-tasks" width="260" height="160"></canvas></div>
+            <div class="card"><h3>📊 近7天成长值增长</h3><canvas id="chart-growth" width="260" height="160"></canvas></div>
+          </div>
+          <div class="card"><h3>🔍 学习分析</h3><div id="study-analysis"></div></div>
+          <div class="card"><h3>📕 错题本</h3><div id="mistake-list"></div></div>
+        </div>
+      </div>
+
+      <!-- 5: 成就系统 -->
+      <div class="page" id="page-5">
+        <div class="page-inner">
+          <h2>成就系统</h2>
+          <div class="achieve-tabs" id="achieve-tabs"></div>
+          <div class="achieve-grid" id="achieve-grid"></div>
+        </div>
+      </div>
+
+      <!-- 7: 智能助手 -->
+      <div class="page" id="page-7">
+        <div class="page-inner ai-page-inner">
+          <div class="ai-header">
+            <h2>🤖 智能助手小梦</h2>
+            <p>有什么问题都可以问我哦~</p>
+          </div>
+          <div class="ai-messages" id="aiMessages"></div>
+          <div class="ai-input-area">
+            <input type="text" id="aiInput" placeholder="输入你的问题..." />
+            <button class="btn" id="aiSendBtn">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6: 系统设置 -->
+      <div class="page" id="page-6">
+        <div class="page-inner">
+          <h2>系统设置</h2>
+          <div class="card"><h3>🎨 主题设置</h3>
+            <div class="setting-row"><span>深色主题</span><label class="switch"><input type="checkbox" id="set-dark"><span class="slider"></span></label></div>
+          </div>
+          <div class="card"><h3>🐑 桌宠设置</h3>
+            <div class="setting-row"><span>透明度</span><input type="range" id="set-opacity" min="30" max="100" value="100" class="range-input"><span id="opacity-val">100%</span></div>
+            <div class="setting-row"><span>自动移动</span><label class="switch"><input type="checkbox" id="set-auto-move"><span class="slider"></span></label></div>
+          </div>
+          <div class="card"><h3>🔔 通知设置</h3>
+            <div class="setting-row"><span>任务截止提醒</span><label class="switch"><input type="checkbox" id="set-deadline-notify" checked><span class="slider"></span></label></div>
+            <div class="setting-row"><span>宠物状态提醒</span><label class="switch"><input type="checkbox" id="set-pet-notify" checked><span class="slider"></span></label></div>
+          </div>
+          <div class="card"><h3>💾 数据管理</h3>
+            <div class="setting-btns">
+              <button class="btn btn-sm" id="export-btn">导出数据</button>
+              <button class="btn btn-sm btn-danger" id="reset-btn">重置数据</button>
+            </div>
+          </div>
+          <div class="card"><h3>ℹ️ 关于</h3>
+            <p class="about-text">学习激励桌宠系统 v2.0<br>喜羊羊IP测试版 · 非商用<br>Electron + 原生HTML/CSS/JS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 模态框 -->
+<div class="modal-mask" id="submit-modal" style="display:none">
+  <div class="modal">
+    <div class="modal-head"><h3>提交任务</h3><button class="modal-x" id="modal-close">&times;</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>任务答案</label><textarea id="submit-text" rows="3" placeholder="请输入你的答案..."></textarea></div>
+      <div class="fg"><label>上传文件</label><div class="file-drop" id="file-drop"><span id="file-name-display">📎 点击或拖拽文件</span><input type="file" id="submit-file" style="display:none" multiple></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn" id="confirm-submit-btn">确认提交</button><button class="btn btn-outline" id="cancel-submit-btn">取消</button></div>
+  </div>
+</div>
+
+<div class="modal-mask" id="name-modal" style="display:none">
+  <div class="modal modal-sm">
+    <div class="modal-head"><h3>修改昵称</h3><button class="modal-x" id="name-modal-close">&times;</button></div>
+    <div class="modal-body"><div class="fg"><input type="text" id="new-name-input" placeholder="请输入新昵称" maxlength="10"></div></div>
+    <div class="modal-foot"><button class="btn" id="confirm-name-btn">确认</button><button class="btn btn-outline" id="cancel-name-btn">取消</button></div>
+  </div>
+</div>
+
+<div class="toast-box" id="toast-box"></div>
+<div class="celebrate" id="celebrate" style="display:none"><div class="celebrate-inner"><div class="ci-icon">🎉</div><div class="ci-text" id="celebrate-text"></div></div></div>
+
+<script src="renderer.js"></script>
+</body>
+</html>
